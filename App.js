@@ -1,117 +1,116 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
+import React, { Component } from "react";
+import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import Button from "./components/Button";
+import Row from "./components/Row";
+import calculator, { initialState } from "./components/util/calculator";
 
-import React from 'react';
-import type {Node} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+// create class component of App
+export default class App extends Component {
+  state = initialState;
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-/* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
- * LTI update could not be added via codemod */
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
-
-const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  // handle tap method
+  HandleTap = (type, value) => {
+    this.setState((state) => calculator(type, value, state));
   };
 
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
+  // render method
+  render() {
+    return (
+      <View style={styles.container}>
+        {/* Status bae here */}
+        <SafeAreaView>
+          <Text style={styles.value}>
+            {parseFloat(this.state.currentValue).toLocaleString()}
+          </Text>
 
+          {/* Do create componentRow */}
+          <Row>
+            <Button
+              text="C"
+              theme="secondary"
+              onPress={() => this.HandleTap("clear")}
+            />
+
+            <Button
+              text="+/-"
+              theme="secondary"
+              onPress={() => this.HandleTap("posneg")}
+            />
+
+            <Button
+              text="%"
+              theme="secondary"
+              onPress={() => this.HandleTap("percentage")}
+            />
+
+            <Button
+              text="/"
+              theme="accent"
+              onPress={() => this.HandleTap("operator", "/")}
+            />
+          </Row>
+
+          {/* Number */}
+          <Row>
+            <Button text="7" onPress={() => this.HandleTap("number", 7)} />
+            <Button text="8" onPress={() => this.HandleTap("number", 8)} />
+            <Button text="9" onPress={() => this.HandleTap("number", 9)} />
+            <Button
+              text="X"
+              theme="accent"
+              onPress={() => this.HandleTap("operator", "*")}
+            />
+          </Row>
+
+          <Row>
+            <Button text="5" onPress={() => this.HandleTap("number", 5)} />
+            <Button text="6" onPress={() => this.HandleTap("number", 6)} />
+            <Button text="7" onPress={() => this.HandleTap("number", 7)} />
+            <Button
+              text="-"
+              theme="accent"
+              onPress={() => this.HandleTap("operator", "-")}
+            />
+          </Row>
+
+          <Row>
+            <Button text="1" onPress={() => this.HandleTap("number", 1)} />
+            <Button text="2" onPress={() => this.HandleTap("number", 2)} />
+            <Button text="3" onPress={() => this.HandleTap("number", 3)} />
+            <Button
+              text="+"
+              theme="accent"
+              onPress={() => this.HandleTap("operator", "+")}
+            />
+          </Row>
+
+          <Row>
+            <Button text="0" onPress={() => this.HandleTap("number", 0)} />
+            <Button text="." onPress={() => this.HandleTap("number", ".")} />
+            <Button
+              text="="
+              theme="primary"
+              onPress={() => this.HandleTap("equal", "=")}
+            />
+          </Row>
+        </SafeAreaView>
+      </View>
+    );
+  }
+}
+
+// create styles of app
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    flex: 1,
+    backgroundColor: "#202020",
+    justifyContent: "flex-end",
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
+  value: {
+    color: "#fff",
+    fontSize: 42,
+    textAlign: "right",
+    marginRight: 20,
+    marginBottom: 10,
   },
 });
-
-export default App;
